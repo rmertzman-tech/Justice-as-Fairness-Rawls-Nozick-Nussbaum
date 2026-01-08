@@ -542,7 +542,7 @@
             
             <div class="skip-info" role="note">
                 <strong>📚 Beyond the Social Contract:</strong>
-                <p style="margin-top: 10px;">In Chapter 15, you learned that a State creates <strong>order</strong>. But order ≠ justice. A tyranny is orderly. A prison is orderly.</p>
+                <p style="margin-top: 10px;">In Class 15, you learned that a State creates <strong>order</strong>. But order ≠ justice. A tyranny is orderly. A prison is orderly.</p>
                 <p style="margin-top: 10px;"><strong>Today's Question:</strong> What does a <em>Good</em> system look like?</p>
             </div>
 
@@ -1288,49 +1288,92 @@
 
             let impact = '<h4 style="margin-bottom: 15px;">How Your Policies Affect You:</h4>';
 
+            // Healthcare analysis
+            const needsHealthcare = (identity.health === 'Poor' || identity.health === 'Declining' || identity.health === 'Fair');
+            const canAffordMarket = (identity.income === 'Very High' || (identity.income === 'Medium' && identity.health === 'Good'));
+            
             if (healthcare.value === 'universal') {
-                if (identity.health === 'Poor' || identity.health === 'Declining') {
-                    impact += '<p style="color: #48bb78;">✓ <strong>Healthcare:</strong> Universal coverage saves you. You can afford treatment.</p>';
+                if (needsHealthcare) {
+                    impact += '<p style="color: #48bb78;">✓ <strong>Healthcare:</strong> Universal coverage saves you. You can afford treatment for your ' + identity.health.toLowerCase() + ' health.</p>';
                 } else {
-                    impact += '<p style="color: #718096;">○ <strong>Healthcare:</strong> You pay higher taxes but rarely use it.</p>';
+                    impact += '<p style="color: #718096;">○ <strong>Healthcare:</strong> You pay higher taxes but rarely need healthcare.</p>';
                 }
-            } else {
-                if (identity.health === 'Poor' || identity.health === 'Declining') {
-                    impact += '<p style="color: #f56565;">✗ <strong>Healthcare:</strong> Market system = bankruptcy from medical bills.</p>';
+            } else { // market healthcare
+                if (!canAffordMarket && needsHealthcare) {
+                    impact += '<p style="color: #f56565;">✗ <strong>Healthcare:</strong> Market system with ' + identity.income.toLowerCase() + ' income = can\'t afford adequate care. Medical bills could bankrupt you.</p>';
+                } else if (!canAffordMarket) {
+                    impact += '<p style="color: #ed8936;">⚠ <strong>Healthcare:</strong> You pay less in taxes but one medical emergency could ruin you financially.</p>';
                 } else {
-                    impact += '<p style="color: #48bb78;">✓ <strong>Healthcare:</strong> You pay less in taxes, can afford private insurance.</p>';
+                    impact += '<p style="color: #48bb78;">✓ <strong>Healthcare:</strong> You pay less in taxes and can afford excellent private insurance.</p>';
                 }
             }
 
+            // Education analysis
+            const hasChildren = (identity.name.includes('Parent') || identity.name.includes('Teacher') || identity.income === 'Low');
+            const childrenNote = hasChildren ? ' your kids' : ' children in your community';
+            
             if (education.value === 'equalquality') {
                 if (identity.income === 'Low') {
-                    impact += '<p style="color: #48bb78;">✓ <strong>Education:</strong> Your kids get quality education despite zip code.</p>';
+                    impact += '<p style="color: #48bb78;">✓ <strong>Education:</strong> Equal funding means' + childrenNote + ' get quality education despite your zip code.</p>';
+                } else if (identity.income === 'Medium') {
+                    impact += '<p style="color: #718096;">○ <strong>Education:</strong> You pay more taxes but schools are uniformly good.</p>';
                 } else {
-                    impact += '<p style="color: #718096;">○ <strong>Education:</strong> You pay more taxes, your neighborhood school is average.</p>';
+                    impact += '<p style="color: #ed8936;">⚠ <strong>Education:</strong> You pay much higher taxes and can\'t leverage your neighborhood\'s wealth for better schools.</p>';
                 }
-            } else {
+            } else { // local funding
                 if (identity.income === 'Low') {
-                    impact += '<p style="color: #f56565;">✗ <strong>Education:</strong> Your kids stuck in underfunded schools.</p>';
+                    impact += '<p style="color: #f56565;">✗ <strong>Education:</strong> Local property tax funding means' + childrenNote + ' are stuck in severely underfunded schools.</p>';
+                } else if (identity.income === 'Medium') {
+                    impact += '<p style="color: #718096;">○ <strong>Education:</strong> Moderate neighborhood means moderate schools - could be better or worse.</p>';
                 } else {
-                    impact += '<p style="color: #48bb78;">✓ <strong>Education:</strong> Your kids attend excellent schools funded by local wealth.</p>';
+                    impact += '<p style="color: #48bb78;">✓ <strong>Education:</strong> Your wealthy neighborhood means' + childrenNote + ' attend excellent, well-funded schools.</p>';
                 }
             }
 
+            // Tax analysis
             if (tax.value === 'progressive') {
                 if (identity.income === 'Very High') {
-                    impact += '<p style="color: #f56565;">✗ <strong>Taxes:</strong> High earner = 40%+ tax rate.</p>';
+                    impact += '<p style="color: #f56565;">✗ <strong>Taxes:</strong> As a high earner, you pay 35-45% tax rate to fund social programs.</p>';
+                } else if (identity.income === 'Medium') {
+                    impact += '<p style="color: #718096;">○ <strong>Taxes:</strong> Middle-class rate around 20-25% - you fund some programs but also benefit from some.</p>';
                 } else {
-                    impact += '<p style="color: #48bb78;">✓ <strong>Taxes:</strong> Lower rate + benefits from social programs.</p>';
+                    impact += '<p style="color: #48bb78;">✓ <strong>Taxes:</strong> Low rate (10-15%) and you benefit substantially from social programs funded by wealthy.</p>';
                 }
-            } else {
+            } else { // flat tax
                 if (identity.income === 'Very High') {
-                    impact += '<p style="color: #48bb78;">✓ <strong>Taxes:</strong> Flat rate = you keep more wealth.</p>';
+                    impact += '<p style="color: #48bb78;">✓ <strong>Taxes:</strong> Flat rate around 20% = you keep much more of your wealth compared to progressive system.</p>';
+                } else if (identity.income === 'Medium') {
+                    impact += '<p style="color: #718096;">○ <strong>Taxes:</strong> Flat 20% is similar to what you\'d pay anyway, but fewer social programs available.</p>';
                 } else {
-                    impact += '<p style="color: #f56565;">✗ <strong>Taxes:</strong> Flat rate hits your paycheck hard + fewer social programs.</p>';
+                    impact += '<p style="color: #f56565;">✗ <strong>Taxes:</strong> Flat 20% hits your low income hard. Same % as rich but you have nothing left for basics. Plus fewer social programs.</p>';
                 }
             }
 
             document.getElementById('policyImpact').innerHTML = impact;
+            
+            // Add overall Rawlsian assessment
+            const goodCount = (impact.match(/✓/g) || []).length;
+            const badCount = (impact.match(/✗/g) || []).length;
+            
+            let rawlsianLesson = '<div style="margin-top: 30px; padding: 20px; border-radius: 8px; border: 3px solid #805ad5; background: #f3e8ff;">';
+            rawlsianLesson += '<h4 style="color: #805ad5; margin-bottom: 15px;">🎓 The Rawlsian Lesson</h4>';
+            
+            if (badCount > goodCount) {
+                rawlsianLesson += '<p><strong>Your policies hurt you in this position.</strong> This shows why the Veil of Ignorance matters.</p>';
+                rawlsianLesson += '<p style="margin-top: 10px;">If you had known you\'d be a <strong>' + identity.name + '</strong>, you might have designed different policies.</p>';
+                rawlsianLesson += '<p style="margin-top: 10px;"><strong>Rawls\' Point:</strong> Design policies you could live with in ANY position, not just your expected one. Use the <strong>Maximin Strategy</strong> - make sure even the worst outcome is livable.</p>';
+            } else if (goodCount > badCount) {
+                rawlsianLesson += '<p><strong>Your policies help you in this position.</strong> But what if you\'d been assigned a different identity?</p>';
+                rawlsianLesson += '<p style="margin-top: 10px;">Try the simulation again. If your policies only work for some identities, they might not pass the Veil test.</p>';
+                rawlsianLesson += '<p style="margin-top: 10px;"><strong>Rawls\' Point:</strong> A just system must be acceptable from behind the Veil - before you know your position. The <strong>Difference Principle</strong> says inequality is only just if it benefits the worst-off.</p>';
+            } else {
+                rawlsianLesson += '<p><strong>Your policies have mixed effects on you.</strong> Some help, some hurt.</p>';
+                rawlsianLesson += '<p style="margin-top: 10px;">This reflects the real complexity of policy design. No system is perfect for everyone all the time.</p>';
+                rawlsianLesson += '<p style="margin-top: 10px;"><strong>Rawls\' Goal:</strong> The <strong>Maximin Strategy</strong> tries to raise the floor - make sure the worst-case scenario is still acceptable.</p>';
+            }
+            
+            rawlsianLesson += '</div>';
+            document.getElementById('policyImpact').innerHTML += rawlsianLesson;
         }
 
         function resetVeil() {
