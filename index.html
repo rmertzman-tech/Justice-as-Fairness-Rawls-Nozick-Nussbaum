@@ -3,522 +3,1565 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Architecture of Agency: A Unified Field Theory</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Justice as Fairness: Rawls, Nozick, and Nussbaum</title>
     <style>
-        body {
-            font-family: 'Space Grotesk', sans-serif;
-            background-color: #f3f4f6; /* Slate 100 for a clean base, sections will have colors */
-            color: #1f2937;
-        }
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #e5e7eb;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #4c1d95;
-            border-radius: 4px;
-        }
-        
-        /* Chart Container Utilities */
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 600px; /* max-w-2xl equiv */
-            margin-left: auto;
-            margin-right: auto;
-            height: 350px;
-            max-height: 400px;
-        }
-        
-        /* Card Hover Effects */
-        .interactive-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .interactive-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        :root {
+            --primary: #2c5282;
+            --secondary: #4299e1;
+            --success: #48bb78;
+            --warning: #ed8936;
+            --danger: #f56565;
+            --purple: #805ad5;
+            --teal: #319795;
+            --rawls: #4299e1;
+            --nozick: #ed8936;
+            --care: #f687b3;
+            --nussbaum: #48bb78;
+            --background: #f7fafc;
+            --card-bg: #ffffff;
+            --text: #2d3748;
+            --text-light: #718096;
+            --border: #e2e8f0;
         }
 
-        /* Step Connector for Vertical Timeline */
-        .step-line {
-            position: absolute;
-            left: 24px;
-            top: 40px;
-            bottom: -20px;
-            width: 4px;
-            background-color: #e5e7eb;
-            z-index: 0;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .step-item:last-child .step-line {
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--background);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .progress-container {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: var(--border);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4299e1, #48bb78);
+            width: 0%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .module {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             display: none;
         }
 
-        /* Vibrant Palette Classes */
-        .bg-vibrant-purple { background-color: #4c1d95; }
-        .text-vibrant-purple { color: #4c1d95; }
-        .bg-vibrant-cyan { background-color: #06b6d4; }
-        .text-vibrant-cyan { color: #06b6d4; }
-        .bg-vibrant-pink { background-color: #db2777; }
-        .text-vibrant-pink { color: #db2777; }
-        .bg-vibrant-yellow { background-color: #f59e0b; }
-        .text-vibrant-yellow { color: #f59e0b; }
-    </style>
-</head>
-<body class="antialiased">
-
-    <!-- Navigation (Sticky) -->
-    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-700 to-pink-600">
-                        Agential Semiosphere
-                    </span>
-                </div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="#intro" class="text-gray-600 hover:text-purple-700 font-medium transition-colors">Convergence</a>
-                    <a href="#framework" class="text-gray-600 hover:text-purple-700 font-medium transition-colors">The 3 Pillars</a>
-                    <a href="#semiosphere" class="text-gray-600 hover:text-purple-700 font-medium transition-colors">Semiosis</a>
-                    <a href="#cib" class="text-gray-600 hover:text-purple-700 font-medium transition-colors">Life Detection (CIB)</a>
-                    <a href="#thermodynamics" class="text-gray-600 hover:text-purple-700 font-medium transition-colors">Thermodynamics</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section id="intro" class="relative bg-vibrant-purple text-white overflow-hidden">
-        <div class="absolute inset-0 opacity-10">
-            <!-- decorative background pattern using CSS gradients -->
-            <div class="absolute inset-0" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 30px 30px;"></div>
-        </div>
-        <div class="max-w-7xl mx-auto px-4 py-24 sm:px-6 lg:px-8 relative z-10 text-center">
-            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
-                The Architecture of <span class="text-vibrant-cyan">Agency</span>
-            </h1>
-            <p class="mt-4 text-xl md:text-2xl max-w-3xl mx-auto text-purple-100 font-light">
-                A Unified Field Theory connecting <span class="font-bold text-vibrant-yellow">Thermodynamics</span>, <span class="font-bold text-vibrant-pink">Biosemiotics</span>, and the <span class="font-bold text-vibrant-cyan">Geometry of Physics</span>.
-            </p>
-            <div class="mt-10">
-                <p class="text-lg text-purple-200 mb-8">
-                    We are moving from a "ghost in the machine" dualism to a rigorous physics of meaning. Discover how the "Coherent Information Bit" (CIB) and "Top-Down Causation" define life itself.
-                </p>
-                <a href="#framework" class="inline-block bg-vibrant-yellow text-purple-900 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-yellow-400 transition-colors">
-                    Explore the Framework
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- The 3 Pillars Framework -->
-    <section id="framework" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-gray-900 sm:text-4xl">The Unified Triad</h2>
-                <p class="mt-4 text-lg text-gray-500 max-w-2xl mx-auto">
-                    The report synthesizes three disparate fields to explain the "observer." Click or hover over the cards below to understand the connection.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Pillar 1 -->
-                <div class="interactive-card bg-gray-50 rounded-xl p-8 border-t-4 border-vibrant-cyan shadow-sm relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl font-bold text-vibrant-cyan">1</div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Geometry & Topology</h3>
-                    <p class="text-sm font-bold text-vibrant-cyan uppercase tracking-wide mb-4">The Container</p>
-                    <p class="text-gray-600 mb-4">
-                        Based on <strong>Invariant Set Theory (IST)</strong>. Reality is a fractal, non-Archimedean geometric structure.
-                    </p>
-                    <div class="bg-white p-4 rounded-lg shadow-inner text-sm text-gray-500">
-                        <strong>Key Insight:</strong> The "Agential Manifold" is the map of all valid states an organism can occupy.
-                    </div>
-                </div>
-
-                <!-- Pillar 2 -->
-                <div class="interactive-card bg-gray-50 rounded-xl p-8 border-t-4 border-vibrant-pink shadow-sm relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl font-bold text-vibrant-pink">2</div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Biosemiotics</h3>
-                    <p class="text-sm font-bold text-vibrant-pink uppercase tracking-wide mb-4">The Translator</p>
-                    <p class="text-gray-600 mb-4">
-                        <strong>Thomas Sebeok's Modeling Systems.</strong> How physical signals are converted into meaningful signs.
-                    </p>
-                    <div class="bg-white p-4 rounded-lg shadow-inner text-sm text-gray-500">
-                        <strong>Key Insight:</strong> Life is not just chemistry; it is the interpretation of signs (Semiosis).
-                    </div>
-                </div>
-
-                <!-- Pillar 3 -->
-                <div class="interactive-card bg-gray-50 rounded-xl p-8 border-t-4 border-vibrant-yellow shadow-sm relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl font-bold text-vibrant-yellow">3</div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Thermodynamics</h3>
-                    <p class="text-sm font-bold text-vibrant-yellow uppercase tracking-wide mb-4">The Cost</p>
-                    <p class="text-gray-600 mb-4">
-                        <strong>Non-Equilibrium Physics.</strong> Maintaining agency requires a constant battle against entropy.
-                    </p>
-                    <div class="bg-white p-4 rounded-lg shadow-inner text-sm text-gray-500">
-                        <strong>Key Insight:</strong> "Goodness" and "Meaning" are high-energy states. Stress degrades them.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Semiosphere Section (Chart + Process) -->
-    <section id="semiosphere" class="py-20 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                
-                <!-- Chart Column -->
-                <div>
-                    <h2 class="text-3xl font-bold text-gray-900 mb-6">The Nested Semiosphere</h2>
-                    <p class="text-gray-600 mb-8 text-lg">
-                        The "Agential Semiosphere" is not a flat plane but a nested hierarchy of meaning-making systems. Just as the biosphere contains ecosystems, the Semiosphere contains "Umwelts" (subjective worlds).
-                    </p>
-                    
-                    <div class="bg-white p-6 rounded-xl shadow-md">
-                        <h4 class="text-lg font-bold text-gray-800 mb-4 text-center">Composition of the Agential Reality</h4>
-                        <!-- Chart Container -->
-                        <div class="chart-container">
-                            <canvas id="semiosphereChart"></canvas>
-                        </div>
-                        <p class="text-xs text-center text-gray-500 mt-4">
-                            *The "Umwelt" is the biological core, wrapped in the "Sociosphere" (Culture), all contained within the universal "Semiosphere".
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Process/Ladder Column -->
-                <div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-8">The Ladder of Interpretation</h3>
-                    <p class="text-gray-600 mb-8">
-                        How does a raw physical impact become a complex thought? Sebeok's "Modeling Systems" explain the ascent from matter to mind.
-                    </p>
-
-                    <div class="relative pl-4">
-                        <!-- Step 1 -->
-                        <div class="step-item relative pl-12 pb-12">
-                            <div class="step-line"></div>
-                            <div class="absolute left-0 top-0 w-12 h-12 rounded-full bg-vibrant-cyan text-white flex items-center justify-center font-bold text-xl shadow-lg z-10">1</div>
-                            <h4 class="text-xl font-bold text-gray-900">Alpha-Mode (Signal)</h4>
-                            <p class="text-sm font-semibold text-vibrant-cyan mb-2">Primary Modeling System</p>
-                            <p class="text-gray-600">
-                                <strong>Raw Physics.</strong> The organism detects a photon or a chemical gradient. It is a "read-only" state. No interpretation, just reaction.
-                            </p>
-                        </div>
-
-                        <!-- Step 2 -->
-                        <div class="step-item relative pl-12 pb-12">
-                            <div class="step-line"></div>
-                            <div class="absolute left-0 top-0 w-12 h-12 rounded-full bg-vibrant-pink text-white flex items-center justify-center font-bold text-xl shadow-lg z-10">2</div>
-                            <h4 class="text-xl font-bold text-gray-900">Beta-Mode (Index/Icon)</h4>
-                            <p class="text-sm font-semibold text-vibrant-pink mb-2">Secondary Modeling System</p>
-                            <p class="text-gray-600">
-                                <strong>Pattern Recognition.</strong> The signal becomes a "Sign". The footprint implies a predator. The "Umwelt" is born here.
-                            </p>
-                        </div>
-
-                        <!-- Step 3 -->
-                        <div class="step-item relative pl-12">
-                            <div class="absolute left-0 top-0 w-12 h-12 rounded-full bg-vibrant-purple text-white flex items-center justify-center font-bold text-xl shadow-lg z-10">3</div>
-                            <h4 class="text-xl font-bold text-gray-900">Tertiary Mode (Symbol)</h4>
-                            <p class="text-sm font-semibold text-vibrant-purple mb-2">Tertiary Modeling System</p>
-                            <p class="text-gray-600">
-                                <strong>Abstract Formalism.</strong> Language, Mathematics, Code. We detach from the immediate physical world to create "Virtual Models" (Simulations), which we then impose back onto reality (Downward Causation).
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Agnostic Life Detection (CIB) Section -->
-    <section id="cib" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 sm:text-4xl">Agnostic Life Detection</h2>
-                <p class="mt-4 text-lg text-gray-500 max-w-2xl mx-auto">
-                    How do we find life if it doesn't look like us? We look for the "Coherent Information Bit" (CIB).
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <!-- Data Viz: Assembly Index -->
-                <div class="bg-gray-50 rounded-xl p-6 shadow-sm border border-gray-100">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">The Molecular Assembly Index (MAI)</h3>
-                    <p class="text-sm text-gray-500 mb-6">
-                        Assembly Theory (Cronin/Walker) states that molecules with high complexity cannot form by chance. There is a statistical "wall" at ~15 steps.
-                    </p>
-                    <div class="chart-container">
-                        <canvas id="cibChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Concept: The Ladder of Detection -->
-                <div class="flex flex-col justify-center space-y-6">
-                    <div class="bg-vibrant-purple text-white p-6 rounded-lg shadow-lg">
-                        <h4 class="text-xl font-bold mb-2">1. The "N=1" Problem</h4>
-                        <p class="opacity-90">Historically, we only looked for "Terran" life (Water, DNA). This limited us.</p>
-                    </div>
-                    <div class="bg-vibrant-pink text-white p-6 rounded-lg shadow-lg transform translate-x-4">
-                        <h4 class="text-xl font-bold mb-2">2. Agnostic Biosignatures</h4>
-                        <p class="opacity-90">We now look for "Complexity" and "Disequilibrium". Life is a system that encodes information into matter.</p>
-                    </div>
-                    <div class="bg-vibrant-cyan text-white p-6 rounded-lg shadow-lg transform translate-x-8">
-                        <h4 class="text-xl font-bold mb-2">3. The CIB Metric</h4>
-                        <p class="opacity-90">The <strong>Coherent Information Bit</strong> is the unit of agency. It quantifies the "Blueprint" required to assemble the molecule.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Thermodynamics & Sapolsky Limit -->
-    <section id="thermodynamics" class="py-20 bg-gray-900 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                
-                <!-- Left Text -->
-                <div class="lg:col-span-1">
-                    <h2 class="text-3xl font-bold text-vibrant-yellow mb-6">The Thermodynamics of Good & Evil</h2>
-                    <p class="text-gray-300 mb-6 leading-relaxed">
-                        Agency is expensive. High-level moral reasoning and "Logical Depth" require massive metabolic energy.
-                    </p>
-                    <div class="bg-gray-800 p-6 rounded-lg border-l-4 border-vibrant-pink">
-                        <h4 class="text-lg font-bold text-white mb-2">The Sapolsky Limit</h4>
-                        <p class="text-sm text-gray-400">
-                            Behavioral biologist Robert Sapolsky has shown that under high stress (Entropy), the brain's frontal cortex shuts down. We regress from "Tertiary Mode" (Ethics/Logic) to "Alpha Mode" (Reaction/Survival).
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Right Chart -->
-                <div class="lg:col-span-2">
-                    <div class="bg-gray-800 rounded-xl p-6 shadow-xl">
-                        <h4 class="text-lg font-bold text-white mb-4">Entropy vs. Agential Capacity</h4>
-                        <div class="chart-container">
-                            <canvas id="entropyChart"></canvas>
-                        </div>
-                        <p class="text-xs text-center text-gray-400 mt-4">
-                            *As Environmental Entropy (Stress/Chaos) increases, the capacity for Agency (Choice/Morality) plummets.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- The Solution: Exo-Constructors -->
-            <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-                <div class="p-4">
-                    <div class="w-16 h-16 bg-vibrant-cyan rounded-full flex items-center justify-center text-3xl mx-auto mb-4">🏛️</div>
-                    <h3 class="text-xl font-bold mb-2">Exo-Constructors</h3>
-                    <p class="text-gray-400 text-sm">We build institutions (Laws, Culture, Religion) to offload the cognitive cost of being "Good".</p>
-                </div>
-                <div class="p-4">
-                    <div class="w-16 h-16 bg-vibrant-yellow rounded-full flex items-center justify-center text-3xl mx-auto mb-4">🧠</div>
-                    <h3 class="text-xl font-bold mb-2">Neuronal Recycling</h3>
-                    <p class="text-gray-400 text-sm">We "recycle" our primate brains to process high-level symbols (Reading, Math) through cultural training.</p>
-                </div>
-                <div class="p-4">
-                    <div class="w-16 h-16 bg-vibrant-pink rounded-full flex items-center justify-center text-3xl mx-auto mb-4">⚖️</div>
-                    <h3 class="text-xl font-bold mb-2">Moral Commonwealth</h3>
-                    <p class="text-gray-400 text-sm">The goal: Create a low-entropy society where the "energy cost" of moral behavior is affordable.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-gray-50 border-t border-gray-200 py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-gray-500 text-sm">
-                Generated based on the analysis of: "Architecture of Agnostic Life Detection", "Agential Semiosphere", "Thermodynamics of Agency", and "Bio-Semiotic and Geometric Architecture".
-            </p>
-            <p class="text-gray-400 text-xs mt-2">
-                © 2025 Agential Semiosphere Synthesis Project.
-            </p>
-        </div>
-    </footer>
-
-    <!-- Chart.js Logic -->
-    <script>
-        // --- Shared Configurations ---
-        Chart.defaults.font.family = "'Space Grotesk', sans-serif";
-        Chart.defaults.color = '#4b5563';
-
-        // --- Label Wrapping Helper ---
-        function wrapLabel(label) {
-            if (label.length > 16) {
-                const words = label.split(' ');
-                const lines = [];
-                let currentLine = words[0];
-
-                for (let i = 1; i < words.length; i++) {
-                    if (currentLine.length + 1 + words[i].length <= 16) {
-                        currentLine += ' ' + words[i];
-                    } else {
-                        lines.push(currentLine);
-                        currentLine = words[i];
-                    }
-                }
-                lines.push(currentLine);
-                return lines;
-            }
-            return label;
+        .module.active {
+            display: block;
+            animation: fadeIn 0.5s;
         }
 
-        // --- Tooltip Callback (Mandatory) ---
-        const tooltipCallback = {
-            title: function(tooltipItems) {
-                const item = tooltipItems[0];
-                let label = item.chart.data.labels[item.dataIndex];
-                if (Array.isArray(label)) {
-                    return label.join(' ');
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .module h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #4299e1;
+            padding-bottom: 10px;
+        }
+
+        .module h3 {
+            color: var(--primary);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .learning-objective {
+            background: #ebf8ff;
+            border-left: 4px solid #4299e1;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .reading-connection {
+            background: #fef5e7;
+            border-left: 4px solid #ed8936;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .reading-connection::before {
+            content: "📖 Reading Connection: ";
+            font-weight: bold;
+            color: #ed8936;
+        }
+
+        .key-concept {
+            background: #e6fffa;
+            border-left: 4px solid #319795;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .key-concept-title {
+            font-weight: bold;
+            color: #234e52;
+            margin-bottom: 8px;
+        }
+
+        .interactive-section {
+            background: #f7fafc;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        /* Veil of Ignorance Simulator */
+        .veil-simulator {
+            margin: 20px 0;
+        }
+
+        .veil-stage {
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 12px;
+            border: 3px solid var(--border);
+            background: white;
+            display: none;
+        }
+
+        .veil-stage.active {
+            display: block;
+        }
+
+        .identity-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .identity-card {
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .identity-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .identity-card.selected {
+            border-color: #4299e1;
+            background: #ebf8ff;
+        }
+
+        .policy-builder {
+            margin: 20px 0;
+        }
+
+        .policy-option {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            background: white;
+        }
+
+        .policy-option label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .policy-option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        /* Blueprint Comparison */
+        .blueprint-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .blueprint-card {
+            padding: 20px;
+            border-radius: 12px;
+            border: 3px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .blueprint-card.rawls {
+            background: linear-gradient(135deg, #bfdbfe, #93c5fd);
+            border-color: var(--rawls);
+        }
+
+        .blueprint-card.nozick {
+            background: linear-gradient(135deg, #fed7aa, #fbbf24);
+            border-color: var(--nozick);
+        }
+
+        .blueprint-card.care {
+            background: linear-gradient(135deg, #fbb6ce, #f687b3);
+            border-color: var(--care);
+        }
+
+        .blueprint-card.nussbaum {
+            background: linear-gradient(135deg, #c6f6d5, #9ae6b4);
+            border-color: var(--nussbaum);
+        }
+
+        /* Wilt Chamberlain */
+        .chamberlain-sim {
+            margin: 20px 0;
+        }
+
+        .basketball-court {
+            position: relative;
+            height: 200px;
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .player-icon {
+            font-size: 4em;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .transaction-log {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        /* Capabilities Checklist */
+        .capabilities-list {
+            margin: 20px 0;
+        }
+
+        .capability-item {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .capability-status {
+            display: flex;
+            gap: 10px;
+        }
+
+        .status-btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 2px solid var(--border);
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .status-btn.active.met {
+            background: #c6f6d5;
+            border-color: #48bb78;
+        }
+
+        .status-btn.active.at-risk {
+            background: #fed7aa;
+            border-color: #ed8936;
+        }
+
+        .status-btn.active.denied {
+            background: #fed7d7;
+            border-color: #f56565;
+        }
+
+        /* Four-Way Audit */
+        .audit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .audit-card {
+            padding: 20px;
+            border-radius: 12px;
+            border: 3px solid var(--border);
+        }
+
+        .audit-card h4 {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .audit-input {
+            margin: 15px 0;
+        }
+
+        .audit-input label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .audit-input textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-family: inherit;
+        }
+
+        /* Buttons */
+        button {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        button:hover {
+            background: #2c5282;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        button:disabled {
+            background: #718096;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        button.primary { background: #2c5282; }
+        button.success { background: #48bb78; }
+        button.danger { background: #f56565; }
+        button.purple { background: #805ad5; }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
+        }
+
+        .checkpoint {
+            background: #fff5f5;
+            border: 2px solid #f56565;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .checkpoint-title {
+            font-weight: bold;
+            color: #f56565;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1em;
+            resize: vertical;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1em;
+        }
+
+        textarea:focus,
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #4299e1;
+        }
+
+        .completed-module {
+            background: #c6f6d5;
+            padding: 10px 15px;
+            border-radius: 6px;
+            display: inline-block;
+            margin: 5px;
+            font-size: 0.9em;
+        }
+
+        .skip-info {
+            background: #fef5e7;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ed8936;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            header h1 { font-size: 1.5em; }
+            .module { padding: 20px; }
+            .blueprint-grid,
+            .audit-grid,
+            .identity-slots { grid-template-columns: 1fr; }
+        }
+
+        :focus {
+            outline: 3px solid #4299e1;
+            outline-offset: 2px;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        @media (prefers-contrast: high) {
+            :root { --border: #000000; }
+            button { border: 2px solid currentColor; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header role="banner">
+            <h1>Justice as Fairness</h1>
+            <p>Rawls, Nozick, Care Ethics, and Nussbaum</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">Class 16: The Four Blueprints of Justice • 60-75 Minutes</p>
+        </header>
+
+        <div class="progress-container" role="region" aria-label="Learning progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-fill" id="progressFill">0%</div>
+            </div>
+            <div id="completedModules" aria-live="polite"></div>
+        </div>
+
+        <!-- Module 0: Introduction -->
+        <section class="module active" id="module0" role="region" aria-labelledby="module0-title">
+            <h2 id="module0-title">Introduction: The Architect's Dilemma</h2>
+            
+            <div class="skip-info" role="note">
+                <strong>📚 Beyond the Social Contract:</strong>
+                <p style="margin-top: 10px;">In Class 15, you learned that a State creates <strong>order</strong>. But order ≠ justice. A tyranny is orderly. A prison is orderly.</p>
+                <p style="margin-top: 10px;"><strong>Today's Question:</strong> What does a <em>Good</em> system look like?</p>
+            </div>
+
+            <div class="learning-objective" role="note">
+                <strong>Learning Objective:</strong> View Rawls, Nozick, Care Ethics, and Nussbaum not as "opposing teams" but as Diagnostic Tools you use to audit the networks you build and inhabit.
+            </div>
+
+            <p>Imagine you are tasked with designing the operating system for a new society. You have to write the code for:</p>
+
+            <ul style="line-height: 2; margin: 20px 0 20px 30px;">
+                <li>Wealth distribution</li>
+                <li>Healthcare access</li>
+                <li>Freedom of speech</li>
+                <li>Labor laws</li>
+            </ul>
+
+            <div style="background: #fed7d7; border: 3px solid #f56565; padding: 20px; border-radius: 12px; margin: 20px 0;">
+                <h3 style="color: #f56565; margin-bottom: 15px;">⚠️ The Catch</h3>
+                <p><strong>You do not know who you will be in this society.</strong></p>
+                <ul style="line-height: 2; margin: 10px 0 0 30px;">
+                    <li>You might be born a billionaire genius with IQ 160</li>
+                    <li>You might be born with severe learning disability in a drought region</li>
+                    <li>You might be male, female, trans, or non-binary</li>
+                    <li>You might be devoutly religious or radically atheist</li>
+                </ul>
+            </div>
+
+            <h3>The Problem: Biased Predictions</h3>
+
+            <p>Rawls argues that most of our "Ethical Judgments" are actually just <strong>"Biased Predictions"</strong> generated by our Personal Reference Frame (PRF).</p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+                <div style="background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #ed8936;">
+                    <p><strong>The wealthy entrepreneur predicts:</strong></p>
+                    <p style="margin-top: 10px;">"Low taxes are just" (because that benefits his current variable settings)</p>
+                </div>
+                <div style="background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #4299e1;">
+                    <p><strong>The struggling artist predicts:</strong></p>
+                    <p style="margin-top: 10px;">"High subsidies are just" (because that protects her current vulnerability)</p>
+                </div>
+            </div>
+
+            <div style="background: #805ad5; color: white; padding: 20px; border-radius: 12px; margin: 20px 0; text-align: center; font-size: 1.2em; font-weight: bold;">
+                To find Objective Justice, we must block the PRF. We must design the system without knowing our own variable settings.
+            </div>
+
+            <div class="reading-connection">
+                Review pages 1-2 on the Architect's Dilemma and the Bias of the Self.
+            </div>
+
+            <div class="checkpoint">
+                <div class="checkpoint-title">✓ Check Your Understanding</div>
+                <p><strong>Before continuing:</strong> Think about a policy you support (healthcare, taxes, education). Are you predicting it's "just" because it benefits your current position?</p>
+                <textarea id="checkpoint0" aria-label="Your response" placeholder="Reflect on your potential bias..."></textarea>
+            </div>
+
+            <div class="navigation">
+                <button disabled>← Previous</button>
+                <button onclick="nextModule()" class="primary">Next: Veil of Ignorance →</button>
+            </div>
+        </section>
+
+        <!-- Module 1: Veil of Ignorance Simulator -->
+        <section class="module" id="module1" role="region" aria-labelledby="module1-title">
+            <h2 id="module1-title">Blueprint 1: John Rawls (Justice as Fairness)</h2>
+            
+            <div class="learning-objective" role="note">
+                <strong>Learning Objective:</strong> Experience Rawls' "Veil of Ignorance" thought experiment and understand the Maximin Strategy (Maximize the Minimum) and Difference Principle.
+            </div>
+
+            <h3>The Core Concept</h3>
+
+            <p>If you were rational and standing behind the <strong>Veil of Ignorance</strong>, Rawls argues you would never agree to:</p>
+
+            <ul style="line-height: 2; margin: 20px 0 20px 30px;">
+                <li>❌ A "Winner-Take-All" system (pure Capitalism) — you might be the loser</li>
+                <li>❌ A "Total Equality" system (pure Communism) — you might be the talented worker who wants reward</li>
+            </ul>
+
+            <p>Instead, you would design a system based on <strong>two principles</strong>:</p>
+
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h4 style="color: #4299e1; margin-bottom: 15px;">Rawls' Two Principles</h4>
+                <p><strong>1. The Liberty Principle:</strong> Everyone gets the maximum amount of basic freedom compatible with everyone else's freedom.</p>
+                <p style="margin-top: 15px;"><strong>2. The Difference Principle:</strong> Inequality is allowed ONLY if it benefits the worst-off members of society.</p>
+            </div>
+
+            <div class="interactive-section veil-simulator" role="application" aria-label="Veil of Ignorance simulator">
+                <h3>Interactive: Behind the Veil</h3>
+
+                <div class="veil-stage active" id="stage1">
+                    <h4>Stage 1: Design the Society (Without Knowing Your Position)</h4>
+                    <p style="margin-bottom: 20px;">You're designing a society but don't know if you'll be rich or poor, healthy or sick, majority or minority. Choose policies:</p>
+
+                    <div class="policy-builder">
+                        <div class="policy-option">
+                            <label>
+                                <input type="radio" name="healthcare" value="universal">
+                                <strong>Universal Healthcare</strong> - Everyone gets healthcare, funded by taxes
+                            </label>
+                        </div>
+                        <div class="policy-option">
+                            <label>
+                                <input type="radio" name="healthcare" value="market">
+                                <strong>Market Healthcare</strong> - You buy what you can afford, no taxes
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="policy-builder">
+                        <div class="policy-option">
+                            <label>
+                                <input type="radio" name="education" value="equalquality">
+                                <strong>Equal Quality Education</strong> - All schools funded equally regardless of zip code
+                            </label>
+                        </div>
+                        <div class="policy-option">
+                            <label>
+                                <input type="radio" name="education" value="local">
+                                <strong>Local Funding</strong> - Schools funded by local property taxes (richer areas = better schools)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="policy-builder">
+                        <div class="policy-option">
+                            <label>
+                                <input type="radio" name="tax" value="progressive">
+                                <strong>Progressive Tax</strong> - Higher earners pay higher % to fund social programs
+                            </label>
+                        </div>
+                        <div class="policy-option">
+                            <label>
+                                <input type="radio" name="tax" value="flat">
+                                <strong>Flat Tax</strong> - Everyone pays same % regardless of income
+                            </label>
+                        </div>
+                    </div>
+
+                    <button onclick="revealIdentity()" class="success" style="width: 100%; margin-top: 20px;">Lift the Veil - Reveal My Identity</button>
+                </div>
+
+                <div class="veil-stage" id="stage2">
+                    <h4>Stage 2: Your Identity Revealed</h4>
+                    <div id="identityReveal" style="padding: 20px; background: #fef5e7; border-radius: 8px; margin: 20px 0;"></div>
+                    <div id="policyImpact" style="padding: 20px; background: white; border-radius: 8px; margin: 20px 0;"></div>
+                    <button onclick="resetVeil()" style="width: 100%;">Try Again with Different Policies</button>
+                </div>
+            </div>
+
+            <div class="key-concept">
+                <div class="key-concept-title">The Maximin Strategy</div>
+                <p>Rawls suggests the rational agent uses the <strong>Maximin Strategy</strong> (Maximize the Minimum).</p>
+                <p style="margin-top: 10px;">You don't try to get the highest possible ceiling (being a billionaire); you try to raise the <strong>floor</strong> so that the worst-case scenario is still livable.</p>
+            </div>
+
+            <h3>CIB Analysis</h3>
+
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #48bb78;">
+                <p><strong>What It Sees:</strong> Structural Deontology. Justice is about the <em>structure</em> of the game, not the score at the end.</p>
+            </div>
+
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f56565;">
+                <p><strong>Blind Spot:</strong> Individual Agency. By focusing so heavily on "luck," Rawls can blur the line between "bad luck" (getting cancer) and "bad choices" (gambling away rent). A strict Rawlsian system risks penalizing the Constructor to subsidize entropy.</p>
+            </div>
+
+            <div class="reading-connection">
+                Review pages 2-3 on Rawls' Justice as Fairness and the Maximin Strategy.
+            </div>
+
+            <div class="checkpoint">
+                <div class="checkpoint-title">✓ Check Your Understanding</div>
+                <p>Explain the Difference Principle: When is inequality allowed in Rawls' system?</p>
+                <textarea id="checkpoint1" aria-label="Your explanation" placeholder="Explain when inequality is just..."></textarea>
+            </div>
+
+            <div class="navigation">
+                <button onclick="prevModule()">← Previous</button>
+                <button onclick="nextModule()" class="primary">Next: Nozick's Entitlement →</button>
+            </div>
+        </section>
+
+        <!-- Module 2: Nozick -->
+        <section class="module" id="module2" role="region" aria-labelledby="module2-title">
+            <h2 id="module2-title">Blueprint 2: Robert Nozick (Justice as Entitlement)</h2>
+            
+            <div class="learning-objective" role="note">
+                <strong>Learning Objective:</strong> Understand Nozick's Historical Justice approach—if the process was fair (no force, no fraud), the outcome is just, no matter how unequal.
+            </div>
+
+            <p>Robert Nozick read Rawls and said: <strong>"This is a beautiful architecture, but it relies on theft."</strong></p>
+
+            <p>Nozick argues that "Society" is not a person. It is not an organism. It is just a collection of individuals living their lives.</p>
+
+            <h3>Patterned vs. Historical Justice</h3>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+                <div style="background: #bfdbfe; padding: 20px; border-radius: 8px; border: 3px solid #4299e1;">
+                    <h4 style="text-align: center;">Patterned Justice (Rawls)</h4>
+                    <p style="margin-top: 10px;">"The wealth must be distributed like this (e.g., a Bell Curve)."</p>
+                    <p style="margin-top: 10px; font-style: italic;">Requires the State to constantly intervene (seize money via taxes) to maintain the pattern.</p>
+                </div>
+                <div style="background: #fed7aa; padding: 20px; border-radius: 8px; border: 3px solid #ed8936;">
+                    <h4 style="text-align: center;">Historical Justice (Nozick)</h4>
+                    <p style="margin-top: 10px;">"Did you get the money freely? Did you steal it? If you got it freely, it is yours. Period."</p>
+                    <p style="margin-top: 10px; font-style: italic;">Focus on the process, not the pattern.</p>
+                </div>
+            </div>
+
+            <div class="interactive-section chamberlain-sim" role="application" aria-label="Wilt Chamberlain scenario">
+                <h3>Interactive: The Wilt Chamberlain Argument</h3>
+
+                <p style="margin-bottom: 20px;">Imagine everyone voluntarily pays $5 to see Wilt Chamberlain play basketball. Wilt gets rich. Everyone else gets poorer by $5. The pattern is now unequal. But who did anything wrong?</p>
+
+                <div class="basketball-court">
+                    <div class="player-icon">🏀</div>
+                </div>
+
+                <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <label for="fans">Number of fans paying $5 each:</label>
+                    <input type="range" id="fans" min="0" max="10000" value="1000" step="100" oninput="updateChamberlain()" style="width: 100%;">
+                    <p style="margin-top: 10px; text-align: center; font-size: 1.2em;"><strong><span id="fanCount">1,000</span> fans</strong></p>
+                </div>
+
+                <button onclick="runChamberlain()" class="success" style="width: 100%; margin: 10px 0;">Watch the Transactions</button>
+
+                <div id="chamberlainResult" style="display: none; margin-top: 20px;"></div>
+            </div>
+
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h4 style="margin-bottom: 15px;">Nozick's Core Concept: Justice is Entitlement</h4>
+                <p>If the process was fair (no force, no fraud), then the outcome is just, no matter how unequal it is.</p>
+                <p style="margin-top: 15px;"><strong>If you tax Wilt to "fix" the inequality, you are effectively forcing him to work for free. You are violating his Self-Ownership.</strong></p>
+            </div>
+
+            <h3>CIB Analysis</h3>
+
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #48bb78;">
+                <p><strong>What It Sees:</strong> Strict Deontology (Rights as Side-Constraints). Rights are walls that cannot be crossed, even for the "General Good."</p>
+            </div>
+
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f56565;">
+                <p><strong>Blind Spot:</strong> Systemic Entropy. Nozick ignores the Sapolsky Limit. If a person is born into a toxic environment with zero resources, their "Freedom of Contract" is an illusion. A starving man "voluntarily" agreeing to dangerous labor is not free; he is thermodynamically coerced.</p>
+            </div>
+
+            <div class="reading-connection">
+                Review pages 3-4 on Nozick's Entitlement Theory and the Wilt Chamberlain argument.
+            </div>
+
+            <div class="checkpoint">
+                <div class="checkpoint-title">✓ Check Your Understanding</div>
+                <p>Do you agree with Nozick that if everyone pays voluntarily, the result is just? Or do you agree with Rawls that the system must intervene when inequality gets too extreme? Where is the line?</p>
+                <textarea id="checkpoint2" aria-label="Your position" placeholder="State your position and reasoning..."></textarea>
+            </div>
+
+            <div class="navigation">
+                <button onclick="prevModule()">← Previous</button>
+                <button onclick="nextModule()" class="primary">Next: Care Ethics →</button>
+            </div>
+        </section>
+
+        <!-- Module 3: Care Ethics -->
+        <section class="module" id="module3" role="region" aria-labelledby="module3-title">
+            <h2 id="module3-title">Blueprint 3: The Ethics of Care</h2>
+            
+            <div class="learning-objective" role="note">
+                <strong>Learning Objective:</strong> Understand how Gilligan and Noddings replace the "Autonomous Mushroom" model with the "Web of Care"—justice isn't about abstract rules but about responsiveness to need.
+            </div>
+
+            <p>Carol Gilligan and Nel Noddings argue that both Rawls and Nozick are making the same mistake:</p>
+
+            <div style="background: #fed7d7; border: 3px solid #f56565; padding: 20px; border-radius: 12px; margin: 20px 0;">
+                <h3 style="color: #f56565; margin-bottom: 15px;">The "Mushroom" Error</h3>
+                <p>They view the human agent as a <strong>"Mushroom"</strong>—something that springs out of the ground fully formed, autonomous, and rational.</p>
+            </div>
+
+            <h3>The Reality: Humans as Dependent</h3>
+
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <p><strong>The Reality:</strong> Humans are born as helpless infants. We spend years being dependent. We become sick, disabled, and old.</p>
+                <p style="margin-top: 15px;">The "Social Contract" isn't a business deal between equal "Mushrooms"; it is a <strong>Web of Care</strong> between unequals.</p>
+            </div>
+
+            <h3>The Core Concept</h3>
+
+            <p>Justice isn't about "Rights" (Abstract Rules) or "Fairness" (Math). It is about <strong>Responsiveness</strong>.</p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+                <div style="background: #bfdbfe; padding: 20px; border-radius: 8px;">
+                    <h4 style="text-align: center;">Rawls/Nozick Ask:</h4>
+                    <p style="margin-top: 10px; text-align: center; font-weight: bold;">"What is the rule?"</p>
+                    <p style="margin-top: 10px; text-align: center; font-style: italic;">(Abstraction)</p>
+                </div>
+                <div style="background: #fbb6ce; padding: 20px; border-radius: 8px;">
+                    <h4 style="text-align: center;">Care Ethics Asks:</h4>
+                    <p style="margin-top: 10px; text-align: center; font-weight: bold;">"What is the need?"</p>
+                    <p style="margin-top: 10px; text-align: center; font-style: italic;">(Connection)</p>
+                </div>
+            </div>
+
+            <div class="interactive-section" role="application" aria-label="Sandwich generation scenario">
+                <h3>Case Study: The "Sandwich Generation"</h3>
+
+                <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <p><strong>The Issue:</strong> A working professional is trying to care for a parent with dementia while raising a toddler.</p>
+                    <ul style="line-height: 2; margin: 10px 0 0 30px;">
+                        <li>The corporate world (Nozickian) says: "That's your private problem."</li>
+                        <li>The legal system (Rawlsian) says: "You have equal rights to work."</li>
+                        <li>Neither helps. The professional burns out.</li>
+                    </ul>
+                </div>
+
+                <div style="background: #fbb6ce; padding: 20px; border-radius: 8px; margin: 20px 0; border: 3px solid #f687b3;">
+                    <h4 style="margin-bottom: 15px;">Care Diagnosis</h4>
+                    <p>The system is extracting value from the Constructor (worker) while refusing to support the Substrate (the family).</p>
+                    <p style="margin-top: 15px;">It fails to see that <strong>"Independence" is a myth</strong> supported by invisible "Dependence" (care work).</p>
+                </div>
+
+                <div style="background: #c6f6d5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="margin-bottom: 15px;">The Fix</h4>
+                    <p>Policies that prioritize relationships:</p>
+                    <ul style="line-height: 2; margin: 10px 0 0 30px;">
+                        <li>Paid family leave</li>
+                        <li>Community care centers</li>
+                        <li>Recognizing "Care" as a form of GDP</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>CIB Analysis</h3>
+
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #48bb78;">
+                <p><strong>What It Sees:</strong> Virtue Ethics (Relational). The primary unit is not the "Individual" but the BioBond.</p>
+            </div>
+
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f56565;">
+                <p><strong>Blind Spot:</strong> Scalability. Care is hard to scale. You can care for your mother; you cannot "Care" for 300 million strangers. Care Ethics struggles to write laws for the stranger. It risks becoming Tribalism (caring only for "my people").</p>
+            </div>
+
+            <div class="reading-connection">
+                Review pages 4-5 on Care Ethics and the Web of Care.
+            </div>
+
+            <div class="checkpoint">
+                <div class="checkpoint-title">✓ Check Your Understanding</div>
+                <p>Think of a time when "following the rules" (Kant/Rawls/Nozick) would have hurt someone who needed care. What would Care Ethics do differently?</p>
+                <textarea id="checkpoint3" aria-label="Your scenario" placeholder="Describe the situation..."></textarea>
+            </div>
+
+            <div class="navigation">
+                <button onclick="prevModule()">← Previous</button>
+                <button onclick="nextModule()" class="primary">Next: Nussbaum's Capabilities →</button>
+            </div>
+        </section>
+
+        <!-- Module 4: Nussbaum Capabilities -->
+        <section class="module" id="module4" role="region" aria-labelledby="module4-title">
+            <h2 id="module4-title">Blueprint 4: Martha Nussbaum (Capabilities Approach)</h2>
+            
+            <div class="learning-objective" role="note">
+                <strong>Learning Objective:</strong> Learn Nussbaum's 10 Central Capabilities and understand why "What people can DO and BE" matters more than "How much money they have."
+            </div>
+
+            <p>Martha Nussbaum (and Amartya Sen) provides the final upgrade. She combines Aristotle with Social Justice.</p>
+
+            <p>She argues that asking <strong>"How much money do people have?"</strong> (Rawls/Nozick) is the wrong question.</p>
+
+            <p style="margin: 20px 0; font-weight: bold; font-size: 1.1em;">A person in a wheelchair might need more money to have the same mobility as a walking person.</p>
+
+            <div style="background: #805ad5; color: white; padding: 20px; border-radius: 12px; margin: 20px 0; text-align: center; font-size: 1.2em; font-weight: bold;">
+                The right question is: "What are people actually able to DO and BE?"
+            </div>
+
+            <h3>The Core Concept</h3>
+
+            <p>A Just Society is one that provides a <strong>Thermodynamic Floor</strong> of 10 Central Capabilities. These are not just legal rights; they are <strong>Functional Capacities</strong>.</p>
+
+            <div class="interactive-section capabilities-list" role="application" aria-label="10 Central Capabilities checklist">
+                <h3>Interactive: Audit the 10 Capabilities</h3>
+                <p style="margin-bottom: 20px;">For each capability, assess: Is it MET in your life/community? AT RISK? Or DENIED?</p>
+
+                <div class="capability-item">
+                    <div>
+                        <strong>1. Life</strong><br>
+                        <span style="font-size: 0.9em;">Not dying prematurely; living a life of normal length</span>
+                    </div>
+                    <div class="capability-status">
+                        <button class="status-btn" onclick="setCapability(1, 'met')">Met ✓</button>
+                        <button class="status-btn" onclick="setCapability(1, 'at-risk')">At Risk ⚠</button>
+                        <button class="status-btn" onclick="setCapability(1, 'denied')">Denied ✗</button>
+                    </div>
+                </div>
+
+                <div class="capability-item">
+                    <div>
+                        <strong>2. Bodily Health</strong><br>
+                        <span style="font-size: 0.9em;">Food, shelter, adequate health care</span>
+                    </div>
+                    <div class="capability-status">
+                        <button class="status-btn" onclick="setCapability(2, 'met')">Met ✓</button>
+                        <button class="status-btn" onclick="setCapability(2, 'at-risk')">At Risk ⚠</button>
+                        <button class="status-btn" onclick="setCapability(2, 'denied')">Denied ✗</button>
+                    </div>
+                </div>
+
+                <div class="capability-item">
+                    <div>
+                        <strong>3. Bodily Integrity</strong><br>
+                        <span style="font-size: 0.9em;">Safety from assault; freedom of movement; reproductive autonomy</span>
+                    </div>
+                    <div class="capability-status">
+                        <button class="status-btn" onclick="setCapability(3, 'met')">Met ✓</button>
+                        <button class="status-btn" onclick="setCapability(3, 'at-risk')">At Risk ⚠</button>
+                        <button class="status-btn" onclick="setCapability(3, 'denied')">Denied ✗</button>
+                    </div>
+                </div>
+
+                <div class="capability-item">
+                    <div>
+                        <strong>4. Senses, Imagination, Thought</strong><br>
+                        <span style="font-size: 0.9em;">Education; ability to use imagination and thought</span>
+                    </div>
+                    <div class="capability-status">
+                        <button class="status-btn" onclick="setCapability(4, 'met')">Met ✓</button>
+                        <button class="status-btn" onclick="setCapability(4, 'at-risk')">At Risk ⚠</button>
+                        <button class="status-btn" onclick="setCapability(4, 'denied')">Denied ✗</button>
+                    </div>
+                </div>
+
+                <div class="capability-item">
+                    <div>
+                        <strong>5. Emotions</strong><br>
+                        <span style="font-size: 0.9em;">Being able to love, grieve, feel gratitude (BioBonds)</span>
+                    </div>
+                    <div class="capability-status">
+                        <button class="status-btn" onclick="setCapability(5, 'met')">Met ✓</button>
+                        <button class="status-btn" onclick="setCapability(5, 'at-risk')">At Risk ⚠</button>
+                        <button class="status-btn" onclick="setCapability(5, 'denied')">Denied ✗</button>
+                    </div>
+                </div>
+
+                <div class="capability-item">
+                    <div>
+                        <strong>6. Practical Reason</strong><br>
+                        <span style="font-size: 0.9em;">Forming a conception of the good (Meta-Construction)</span>
+                    </div>
+                    <div class="capability-status">
+                        <button class="status-btn" onclick="setCapability(6, 'met')">Met ✓</button>
+                        <button class="status-btn" onclick="setCapability(6, 'at-risk')">At Risk ⚠</button>
+                        <button class="status-btn" onclick="setCapability(6, 'denied')">Denied ✗</button>
+                    </div>
+                </div>
+
+                <div class="capability-item">
+                    <div>
+                        <strong>7. Affiliation</strong><br>
+                        <span style="font-size: 0.9em;">Social interaction; being treated with dignity</span>
+                    </div>
+                    <div class="capability-status">
+                        <button class="status-btn" onclick="setCapability(7, 'met')">Met ✓</button>
+                        <button class="status-btn" onclick="setCapability(7, 'at-risk')">At Risk ⚠</button>
+                        <button class="status-btn" onclick="setCapability(7, 'denied')">Denied ✗</button>
+                    </div>
+                </div>
+
+                <div class="capability-item">
+                    <div>
+                        <strong>8. Other Species</strong><br>
+                        <span style="font-size: 0.9em;">Concern for and relation to nature and animals</span>
+                    </div>
+                    <div class="capability-status">
+                        <button class="status-btn" onclick="setCapability(8, 'met')">Met ✓</button>
+                        <button class="status-btn" onclick="setCapability(8, 'at-risk')">At Risk ⚠</button>
+                        <button class="status-btn" onclick="setCapability(8, 'denied')">Denied ✗</button>
+                    </div>
+                </div>
+
+                <div class="capability-item">
+                    <div>
+                        <strong>9. Play</strong><br>
+                        <span style="font-size: 0.9em;">Recreation; recovery from entropy</span>
+                    </div>
+                    <div class="capability-status">
+                        <button class="status-btn" onclick="setCapability(9, 'met')">Met ✓</button>
+                        <button class="status-btn" onclick="setCapability(9, 'at-risk')">At Risk ⚠</button>
+                        <button class="status-btn" onclick="setCapability(9, 'denied')">Denied ✗</button>
+                    </div>
+                </div>
+
+                <div class="capability-item">
+                    <div>
+                        <strong>10. Control over Environment</strong><br>
+                        <span style="font-size: 0.9em;">Political voice; property rights; meaningful work</span>
+                    </div>
+                    <div class="capability-status">
+                        <button class="status-btn" onclick="setCapability(10, 'met')">Met ✓</button>
+                        <button class="status-btn" onclick="setCapability(10, 'at-risk')">At Risk ⚠</button>
+                        <button class="status-btn" onclick="setCapability(10, 'denied')">Denied ✗</button>
+                    </div>
+                </div>
+
+                <button onclick="analyzeCapabilities()" class="success" style="width: 100%; margin-top: 20px;">Analyze My Capabilities Profile</button>
+
+                <div id="capabilityResult" style="display: none; margin-top: 20px; padding: 20px; background: white; border-radius: 8px;"></div>
+            </div>
+
+            <h3>Case Study: The Gig Economy</h3>
+
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <p><strong>The Issue:</strong> A gig worker has the "Right" to work whenever they want (Nozickian Freedom). But they have no healthcare, no job security, and barely earn subsistence wages. They are too exhausted to plan for the future.</p>
+                <p style="margin-top: 15px;"><strong>Nussbaum Diagnosis:</strong> This is a <strong>Capability Failure</strong>. The worker has "Formal Freedom" but lacks "Substantive Freedom." They are trapped below the Sapolsky Limit. They lack the capability of Bodily Health and Practical Reason because they are in survival mode.</p>
+                <p style="margin-top: 15px;"><strong>The Fix:</strong> Ensure the "Floor" is met. Universal healthcare, living wages, or Universal Basic Income (UBI) are not "handouts"; they are the fuel required to activate the citizen's agency.</p>
+            </div>
+
+            <h3>CIB Analysis</h3>
+
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #48bb78;">
+                <p><strong>What It Sees:</strong> Aristotelian/Consequentialist. It focuses on the Flourishing (Eudaimonia) of the organism.</p>
+            </div>
+
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f56565;">
+                <p><strong>Blind Spot:</strong> Paternalism. To ensure everyone has these capabilities, the State must intervene heavily. It risks deciding "for" the citizen what a "Good Life" looks like, potentially overriding their F-Vector (Freedom).</p>
+            </div>
+
+            <div class="reading-connection">
+                Review pages 4-6 on Nussbaum's Capabilities Approach and the 10 Central Capabilities.
+            </div>
+
+            <div class="checkpoint">
+                <div class="checkpoint-title">✓ Check Your Understanding</div>
+                <p>Look at Nussbaum's list of 10 Capabilities. Which one is most at risk in your own life or community right now?</p>
+                <textarea id="checkpoint4" aria-label="Your capability analysis" placeholder="Identify the at-risk capability and explain..."></textarea>
+            </div>
+
+            <div class="navigation">
+                <button onclick="prevModule()">← Previous</button>
+                <button onclick="nextModule()" class="primary">Next: Four-Way Diagnostic →</button>
+            </div>
+        </section>
+
+        <!-- Module 5: Four-Way Diagnostic -->
+        <section class="module" id="module5" role="region" aria-labelledby="module5-title">
+            <h2 id="module5-title">The Synthesis: Four-Way Diagnostic Toolkit</h2>
+            
+            <div class="learning-objective" role="note">
+                <strong>Learning Objective:</strong> Learn to run any social issue through all four diagnostic lenses (Nussbaum, Rawls, Nozick, Care) to build systems where the Floor is solid, the Structure is fair, the Walls respect liberty, and the Mortar is connection.
+            </div>
+
+            <p>As a student and future professional, you should not simply pick a "Team."</p>
+
+            <div style="background: #805ad5; color: white; padding: 20px; border-radius: 12px; margin: 20px 0; text-align: center; font-size: 1.2em; font-weight: bold;">
+                View these four theories as a Diagnostic Toolkit. When you analyze a social issue, run it through the Four-Way Audit.
+            </div>
+
+            <div class="interactive-section" role="application" aria-label="Four-way diagnostic audit tool">
+                <h3>Interactive: Run the Four-Way Audit</h3>
+
+                <p style="margin-bottom: 20px;"><strong>Choose a scenario or enter your own:</strong></p>
+
+                <select id="scenario" onchange="loadScenario()" style="margin-bottom: 20px;">
+                    <option value="">Select a scenario...</option>
+                    <option value="university">My University's Tuition & Financial Aid</option>
+                    <option value="workplace">My Workplace's Benefits Policy</option>
+                    <option value="housing">Local Housing / Rent Control Policy</option>
+                    <option value="custom">Custom Issue...</option>
+                </select>
+
+                <div id="customScenario" style="display: none; margin-bottom: 20px;">
+                    <label for="customIssue"><strong>Describe your issue:</strong></label>
+                    <textarea id="customIssue" placeholder="E.g., 'Our city is considering banning homeless encampments...'"></textarea>
+                </div>
+
+                <div class="audit-grid">
+                    <div class="audit-card" style="background: #c6f6d5; border-color: #48bb78;">
+                        <h4>1️⃣ Nussbaum Audit (The Floor)</h4>
+                        <p style="font-size: 0.9em; margin-bottom: 15px;">Does this system push people below the Sapolsky Limit? Does it deny them the fuel to be human?</p>
+                        <div class="audit-input">
+                            <label for="nussbaumAudit">Your analysis:</label>
+                            <textarea id="nussbaumAudit" placeholder="E.g., 'Students working 40 hrs/week have no time for Practical Reason or Play...'"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="audit-card" style="background: #bfdbfe; border-color: #4299e1;">
+                        <h4>2️⃣ Rawlsian Audit (The Structure)</h4>
+                        <p style="font-size: 0.9em; margin-bottom: 15px;">If I didn't know my role in this system, would I sign the contract?</p>
+                        <div class="audit-input">
+                            <label for="rawlsAudit">Your analysis:</label>
+                            <textarea id="rawlsAudit" placeholder="E.g., 'Behind the Veil, I wouldn't agree to a system where only rich kids get good internships...'"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="audit-card" style="background: #fed7aa; border-color: #ed8936;">
+                        <h4>3️⃣ Nozickian Audit (The Walls)</h4>
+                        <p style="font-size: 0.9em; margin-bottom: 15px;">Does this policy treat individuals as "Resources" to be mined rather than Agents with rights?</p>
+                        <div class="audit-input">
+                            <label for="nozickAudit">Your analysis:</label>
+                            <textarea id="nozickAudit" placeholder="E.g., 'Mandatory student fees for things I don't use = forced labor...'"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="audit-card" style="background: #fbb6ce; border-color: #f687b3;">
+                        <h4>4️⃣ Care Audit (The Web)</h4>
+                        <p style="font-size: 0.9em; margin-bottom: 15px;">Does this policy sever the BioBonds between people? Does it isolate the vulnerable?</p>
+                        <div class="audit-input">
+                            <label for="careAudit">Your analysis:</label>
+                            <textarea id="careAudit" placeholder="E.g., 'Online-only classes during pandemic destroyed community support networks...'"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="synthesizeAudit()" class="success" style="width: 100%; margin-top: 20px;">Synthesize My Four-Way Audit</button>
+
+                <div id="auditSynthesis" style="display: none; margin-top: 20px; padding: 20px; background: white; border-radius: 8px; border: 3px solid #805ad5;"></div>
+            </div>
+
+            <div class="key-concept">
+                <div class="key-concept-title">The Meta-Constructor's Goal</div>
+                <p>Build systems where:</p>
+                <ul style="line-height: 2; margin-top: 10px;">
+                    <li>The <strong>Floor</strong> is solid (Nussbaum)</li>
+                    <li>The <strong>Structure</strong> is fair (Rawls)</li>
+                    <li>The <strong>Walls</strong> respect liberty (Nozick)</li>
+                    <li>The <strong>Mortar</strong> is made of connection (Care)</li>
+                </ul>
+            </div>
+
+            <div class="reading-connection">
+                Review pages 5-6 on the Synthesis and Four-Way Audit.
+            </div>
+
+            <div class="checkpoint">
+                <div class="checkpoint-title">✓ Final Synthesis</div>
+                <p>Complete the three study questions:</p>
+                <ol style="margin: 15px 0 15px 20px;">
+                    <li><strong>The Veil Test:</strong> Apply "Veil of Ignorance" to your university/workplace</li>
+                    <li><strong>The Wilt Chamberlain Challenge:</strong> Where's your line on inequality?</li>
+                    <li><strong>The Capability Audit:</strong> Which capability most at risk in your community?</li>
+                </ol>
+                <textarea id="checkpointFinal" aria-label="Your synthesis" placeholder="Answer the three study questions..." style="min-height: 150px;"></textarea>
+            </div>
+
+            <div style="background: #c6f6d5; padding: 20px; border-radius: 8px; margin: 30px 0; text-align: center;">
+                <h3 style="margin-bottom: 10px;">🎓 Class 16 Complete!</h3>
+                <p><strong>The Four Blueprints of Justice</strong> - You now have:</p>
+                <ul style="text-align: left; margin: 10px auto; max-width: 600px;">
+                    <li>Rawls: Veil of Ignorance, Maximin, Difference Principle</li>
+                    <li>Nozick: Entitlement Theory, Historical Justice, Wilt Chamberlain</li>
+                    <li>Care Ethics: Web of Care, Responsiveness over Rules</li>
+                    <li>Nussbaum: 10 Capabilities, Thermodynamic Floor for Flourishing</li>
+                    <li>Four-Way Diagnostic: Integrated toolkit for analyzing justice</li>
+                </ul>
+                <p style="margin-top: 15px; font-weight: bold;">You are now equipped to audit any social system.</p>
+                <button onclick="downloadResponses()" class="success" style="margin-top: 15px;">
+                    📥 Download Your Responses
+                </button>
+            </div>
+
+            <div class="navigation">
+                <button onclick="prevModule()">← Previous</button>
+                <button onclick="location.reload()" class="primary">↻ Start Over</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // State management
+        let currentModule = 0;
+        const totalModules = 6;
+        let capabilityStates = {};
+
+        // Progress tracking
+        function updateProgress() {
+            const progress = Math.round((currentModule / totalModules) * 100);
+            const progressFill = document.getElementById('progressFill');
+            progressFill.style.width = progress + '%';
+            progressFill.textContent = progress + '%';
+            progressFill.setAttribute('aria-valuenow', progress);
+
+            const completed = document.getElementById('completedModules');
+            const moduleNames = [
+                'Introduction', 'Rawls (Veil of Ignorance)', 'Nozick (Entitlement)',
+                'Care Ethics', 'Nussbaum (Capabilities)', 'Four-Way Diagnostic'
+            ];
+            
+            let html = '';
+            for (let i = 0; i < currentModule; i++) {
+                html += '<span class="completed-module">✓ ' + moduleNames[i] + '</span>';
+            }
+            completed.innerHTML = html;
+        }
+
+        // Navigation
+        function nextModule() {
+            document.getElementById('module' + currentModule).classList.remove('active');
+            currentModule++;
+            if (currentModule < totalModules) {
+                document.getElementById('module' + currentModule).classList.add('active');
+                updateProgress();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function prevModule() {
+            if (currentModule > 0) {
+                document.getElementById('module' + currentModule).classList.remove('active');
+                currentModule--;
+                document.getElementById('module' + currentModule).classList.add('active');
+                updateProgress();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // Veil of Ignorance Simulator
+        function revealIdentity() {
+            const healthcare = document.querySelector('input[name="healthcare"]:checked');
+            const education = document.querySelector('input[name="education"]:checked');
+            const tax = document.querySelector('input[name="tax"]:checked');
+
+            if (!healthcare || !education || !tax) {
+                alert('Please select a policy for each category');
+                return;
+            }
+
+            const identities = [
+                { name: 'Single Parent Working Minimum Wage', income: 'Low', health: 'Fair', education: 'High School' },
+                { name: 'Tech CEO', income: 'Very High', health: 'Excellent', education: 'Elite University' },
+                { name: 'Person with Chronic Illness', income: 'Medium', health: 'Poor', education: 'College' },
+                { name: 'Recent Immigrant', income: 'Low', health: 'Good', education: 'Foreign Degree (not recognized)' },
+                { name: 'Retired Teacher', income: 'Low', health: 'Declining', education: 'Masters' },
+                { name: 'Small Business Owner', income: 'Medium', health: 'Good', education: 'Some College' }
+            ];
+
+            const identity = identities[Math.floor(Math.random() * identities.length)];
+
+            document.getElementById('stage1').classList.remove('active');
+            document.getElementById('stage2').classList.add('active');
+
+            const reveal = document.getElementById('identityReveal');
+            reveal.innerHTML = '<h4 style="margin-bottom: 15px;">You are: ' + identity.name + '</h4>' +
+                '<p><strong>Income:</strong> ' + identity.income + '</p>' +
+                '<p><strong>Health:</strong> ' + identity.health + '</p>' +
+                '<p><strong>Education:</strong> ' + identity.education + '</p>';
+
+            let impact = '<h4 style="margin-bottom: 15px;">How Your Policies Affect You:</h4>';
+
+            if (healthcare.value === 'universal') {
+                if (identity.health === 'Poor' || identity.health === 'Declining') {
+                    impact += '<p style="color: #48bb78;">✓ <strong>Healthcare:</strong> Universal coverage saves you. You can afford treatment.</p>';
                 } else {
-                    return label;
+                    impact += '<p style="color: #718096;">○ <strong>Healthcare:</strong> You pay higher taxes but rarely use it.</p>';
+                }
+            } else {
+                if (identity.health === 'Poor' || identity.health === 'Declining') {
+                    impact += '<p style="color: #f56565;">✗ <strong>Healthcare:</strong> Market system = bankruptcy from medical bills.</p>';
+                } else {
+                    impact += '<p style="color: #48bb78;">✓ <strong>Healthcare:</strong> You pay less in taxes, can afford private insurance.</p>';
                 }
             }
-        };
 
-        // --- Chart 1: Semiosphere Nested Donut ---
-        const ctxSemio = document.getElementById('semiosphereChart').getContext('2d');
-        new Chart(ctxSemio, {
-            type: 'doughnut',
-            data: {
-                labels: ['Umwelt (Biological Core)', 'Sociosphere (Cultural Layer)', 'Semiosphere (Universal Context)'],
-                datasets: [{
-                    data: [40, 35, 25],
-                    backgroundColor: [
-                        '#db2777', // Pink (Core)
-                        '#06b6d4', // Cyan (Middle)
-                        '#4c1d95'  // Purple (Outer)
-                    ],
-                    borderWidth: 0,
-                    hoverOffset: 10
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '65%',
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: { padding: 20, usePointStyle: true }
-                    },
-                    tooltip: {
-                        callbacks: tooltipCallback,
-                        backgroundColor: 'rgba(17, 24, 39, 0.9)',
-                        padding: 12
-                    }
+            if (education.value === 'equalquality') {
+                if (identity.income === 'Low') {
+                    impact += '<p style="color: #48bb78;">✓ <strong>Education:</strong> Your kids get quality education despite zip code.</p>';
+                } else {
+                    impact += '<p style="color: #718096;">○ <strong>Education:</strong> You pay more taxes, your neighborhood school is average.</p>';
+                }
+            } else {
+                if (identity.income === 'Low') {
+                    impact += '<p style="color: #f56565;">✗ <strong>Education:</strong> Your kids stuck in underfunded schools.</p>';
+                } else {
+                    impact += '<p style="color: #48bb78;">✓ <strong>Education:</strong> Your kids attend excellent schools funded by local wealth.</p>';
                 }
             }
-        });
 
-        // --- Chart 2: CIB Assembly Index (Bar) ---
-        const ctxCIB = document.getElementById('cibChart').getContext('2d');
-        const cibLabels = ['Simple Molecules', 'Amino Acids', 'Complex Lipids', 'The CIB Threshold', 'Technosignatures'];
-        const processedCibLabels = cibLabels.map(wrapLabel);
-
-        new Chart(ctxCIB, {
-            type: 'bar',
-            data: {
-                labels: processedCibLabels,
-                datasets: [{
-                    label: 'Molecular Assembly Index (Steps)',
-                    data: [2, 5, 12, 16, 25],
-                    backgroundColor: (ctx) => {
-                        const val = ctx.raw;
-                        // Color change at threshold > 15
-                        return val > 15 ? '#06b6d4' : '#e5e7eb';
-                    },
-                    borderRadius: 6,
-                    borderSkipped: false
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { borderDash: [5, 5] },
-                        title: { display: true, text: 'Complexity Steps' }
-                    },
-                    x: {
-                        grid: { display: false }
-                    }
-                },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: tooltipCallback
-                    },
-                    annotation: {
-                        // Note: Requires annotation plugin, but strictly using core Chart.js here.
-                        // We simulate the threshold line visually in the data structure logic or via separate plugin if loaded.
-                        // Since external plugins aren't guaranteed, we rely on color coding (Grey vs Cyan).
-                    }
+            if (tax.value === 'progressive') {
+                if (identity.income === 'Very High') {
+                    impact += '<p style="color: #f56565;">✗ <strong>Taxes:</strong> High earner = 40%+ tax rate.</p>';
+                } else {
+                    impact += '<p style="color: #48bb78;">✓ <strong>Taxes:</strong> Lower rate + benefits from social programs.</p>';
+                }
+            } else {
+                if (identity.income === 'Very High') {
+                    impact += '<p style="color: #48bb78;">✓ <strong>Taxes:</strong> Flat rate = you keep more wealth.</p>';
+                } else {
+                    impact += '<p style="color: #f56565;">✗ <strong>Taxes:</strong> Flat rate hits your paycheck hard + fewer social programs.</p>';
                 }
             }
-        });
 
-        // --- Chart 3: Entropy vs Agency (Line/Scatter) ---
-        const ctxEntropy = document.getElementById('entropyChart').getContext('2d');
-        new Chart(ctxEntropy, {
-            type: 'line',
-            data: {
-                labels: ['Low Stress', 'Moderate Stress', 'High Stress', 'Survival Mode'],
-                datasets: [
-                    {
-                        label: 'Agential Capacity (Logic/Ethics)',
-                        data: [95, 75, 30, 5],
-                        borderColor: '#f59e0b', // Yellow
-                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
-                        borderWidth: 3,
-                        tension: 0.4,
-                        fill: true
-                    },
-                    {
-                        label: 'Primate Reaction (Instinct)',
-                        data: [20, 40, 85, 98],
-                        borderColor: '#db2777', // Pink
-                        borderWidth: 2,
-                        borderDash: [5, 5],
-                        tension: 0.4,
-                        fill: false
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                        ticks: { color: '#9ca3af' },
-                        title: { display: true, text: 'Functional Capacity %', color: '#9ca3af' }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: { color: '#9ca3af' }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        labels: { color: '#d1d5db' }
-                    },
-                    tooltip: {
-                        callbacks: tooltipCallback,
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)'
+            document.getElementById('policyImpact').innerHTML = impact;
+        }
+
+        function resetVeil() {
+            document.getElementById('stage2').classList.remove('active');
+            document.getElementById('stage1').classList.add('active');
+            document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+        }
+
+        // Wilt Chamberlain
+        function updateChamberlain() {
+            const fans = document.getElementById('fans').value;
+            document.getElementById('fanCount').textContent = parseInt(fans).toLocaleString();
+        }
+
+        function runChamberlain() {
+            const fans = parseInt(document.getElementById('fans').value);
+            const price = 5;
+            const wiltEarnings = fans * price;
+            const avgWealth = 10000;
+            const wiltWealth = avgWealth + wiltEarnings;
+            const fanWealth = avgWealth - price;
+
+            const result = document.getElementById('chamberlainResult');
+            result.style.display = 'block';
+            result.innerHTML = '<div style="background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #48bb78;">' +
+                '<h4 style="margin-bottom: 15px;">Transaction Complete</h4>' +
+                '<p><strong>Wilt earned:</strong> $' + wiltEarnings.toLocaleString() + '</p>' +
+                '<p style="margin-top: 10px;"><strong>Wilt\'s total wealth:</strong> $' + wiltWealth.toLocaleString() + '</p>' +
+                '<p style="margin-top: 10px;"><strong>Each fan\'s wealth:</strong> $' + fanWealth.toLocaleString() + ' (down $5)</p>' +
+                '<p style="margin-top: 20px; font-weight: bold;">The pattern is now unequal. Wilt is much richer than everyone else.</p>' +
+                '</div>' +
+                '<div style="background: #fed7aa; padding: 20px; border-radius: 8px; margin-top: 15px; border: 3px solid #ed8936;">' +
+                '<h4 style="color: #ed8936; margin-bottom: 15px;">Nozick Asks:</h4>' +
+                '<p><strong>Who did anything wrong?</strong> Every transaction was voluntary. No force, no fraud.</p>' +
+                '<p style="margin-top: 10px;"><strong>If you tax Wilt to "fix" the inequality...</strong> You are forcing him to work for free. You are treating him as a Natural Resource to be mined.</p>' +
+                '<p style="margin-top: 10px; font-style: italic;">Historical Justice: The process was fair, so the outcome is just.</p>' +
+                '</div>' +
+                '<div style="background: #bfdbfe; padding: 20px; border-radius: 8px; margin-top: 15px; border: 3px solid #4299e1;">' +
+                '<h4 style="color: #4299e1; margin-bottom: 15px;">Rawls Responds:</h4>' +
+                '<p><strong>The Birth Lottery:</strong> Wilt was born with extraordinary height and talent. The fans can never compete.</p>' +
+                '<p style="margin-top: 10px;"><strong>If inequality doesn\'t benefit the worst-off...</strong> (e.g., ticket prices exclude poor kids from ever seeing the game), then the system needs correction.</p>' +
+                '<p style="margin-top: 10px; font-style: italic;">Structural Justice: We need to maintain a fair distribution pattern.</p>' +
+                '</div>';
+        }
+
+        // Capabilities
+        function setCapability(num, status) {
+            capabilityStates[num] = status;
+            
+            // Update button states
+            const item = document.querySelectorAll('.capability-item')[num - 1];
+            const buttons = item.querySelectorAll('.status-btn');
+            buttons.forEach(btn => btn.classList.remove('active', 'met', 'at-risk', 'denied'));
+            
+            if (status === 'met') buttons[0].classList.add('active', 'met');
+            if (status === 'at-risk') buttons[1].classList.add('active', 'at-risk');
+            if (status === 'denied') buttons[2].classList.add('active', 'denied');
+        }
+
+        function analyzeCapabilities() {
+            const total = Object.keys(capabilityStates).length;
+            if (total === 0) {
+                alert('Please assess at least one capability');
+                return;
+            }
+
+            let met = 0, atRisk = 0, denied = 0;
+            for (let key in capabilityStates) {
+                if (capabilityStates[key] === 'met') met++;
+                if (capabilityStates[key] === 'at-risk') atRisk++;
+                if (capabilityStates[key] === 'denied') denied++;
+            }
+
+            const result = document.getElementById('capabilityResult');
+            result.style.display = 'block';
+
+            let diagnosis = '';
+            if (denied > 0) {
+                diagnosis = '<div style="background: #fed7d7; padding: 15px; border-radius: 8px; border: 3px solid #f56565;">' +
+                    '<h4 style="color: #f56565; margin-bottom: 10px;">⚠️ CRITICAL: Capabilities Denied</h4>' +
+                    '<p>You have <strong>' + denied + '</strong> capabilities completely denied. This means you are being pushed below the Thermodynamic Floor required for human flourishing.</p>' +
+                    '<p style="margin-top: 10px; font-weight: bold;">Nussbaum\'s Verdict: This is unjust. A society that denies core capabilities is failing its citizens.</p>' +
+                    '</div>';
+            } else if (atRisk > 2) {
+                diagnosis = '<div style="background: #fed7aa; padding: 15px; border-radius: 8px; border: 3px solid #ed8936;">' +
+                    '<h4 style="color: #ed8936; margin-bottom: 10px;">⚠ WARNING: Multiple At-Risk Capabilities</h4>' +
+                    '<p>You have <strong>' + atRisk + '</strong> capabilities at risk. You are close to falling below the Sapolsky Limit.</p>' +
+                    '<p style="margin-top: 10px; font-weight: bold;">This is precarious. Small shocks (job loss, illness) could push you into crisis.</p>' +
+                    '</div>';
+            } else {
+                diagnosis = '<div style="background: #c6f6d5; padding: 15px; border-radius: 8px; border: 3px solid #48bb78;">' +
+                    '<h4 style="color: #48bb78; margin-bottom: 10px;">✓ Capabilities Floor Met</h4>' +
+                    '<p>You have <strong>' + met + '</strong> capabilities met. You are above the Thermodynamic Floor.</p>' +
+                    '<p style="margin-top: 10px;">This gives you the fuel for Meta-Construction and ethical agency.</p>' +
+                    '</div>';
+            }
+
+            result.innerHTML = '<h4 style="margin-bottom: 15px;">Your Capabilities Profile</h4>' +
+                '<p><strong>Met:</strong> ' + met + ' | <strong>At Risk:</strong> ' + atRisk + ' | <strong>Denied:</strong> ' + denied + '</p>' +
+                '<div style="margin-top: 20px;">' + diagnosis + '</div>' +
+                '<p style="margin-top: 20px; font-style: italic;">Note: "Play" is often the first to go in high-pressure environments. If you marked it At Risk or Denied, you are at risk of burnout.</p>';
+        }
+
+        // Four-Way Audit
+        function loadScenario() {
+            const scenario = document.getElementById('scenario').value;
+            const custom = document.getElementById('customScenario');
+            
+            if (scenario === 'custom') {
+                custom.style.display = 'block';
+            } else {
+                custom.style.display = 'none';
+            }
+        }
+
+        function synthesizeAudit() {
+            const nussbaum = document.getElementById('nussbaumAudit').value.trim();
+            const rawls = document.getElementById('rawlsAudit').value.trim();
+            const nozick = document.getElementById('nozickAudit').value.trim();
+            const care = document.getElementById('careAudit').value.trim();
+
+            if (!nussbaum || !rawls || !nozick || !care) {
+                alert('Please complete all four audits');
+                return;
+            }
+
+            const synthesis = document.getElementById('auditSynthesis');
+            synthesis.style.display = 'block';
+            
+            synthesis.innerHTML = '<h4 style="color: #805ad5; margin-bottom: 15px;">Four-Way Diagnostic Complete</h4>' +
+                '<p style="font-weight: bold; margin-bottom: 20px;">You have successfully audited this issue through all four lenses. Here\'s your synthesis:</p>' +
+                '<div style="background: #c6f6d5; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #48bb78;">' +
+                '<h5 style="margin-bottom: 10px;">1️⃣ Nussbaum (Floor Check)</h5>' +
+                '<p>' + nussbaum + '</p>' +
+                '</div>' +
+                '<div style="background: #bfdbfe; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #4299e1;">' +
+                '<h5 style="margin-bottom: 10px;">2️⃣ Rawls (Structure Check)</h5>' +
+                '<p>' + rawls + '</p>' +
+                '</div>' +
+                '<div style="background: #fed7aa; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #ed8936;">' +
+                '<h5 style="margin-bottom: 10px;">3️⃣ Nozick (Liberty Check)</h5>' +
+                '<p>' + nozick + '</p>' +
+                '</div>' +
+                '<div style="background: #fbb6ce; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #f687b3;">' +
+                '<h5 style="margin-bottom: 10px;">4️⃣ Care (Connection Check)</h5>' +
+                '<p>' + care + '</p>' +
+                '</div>' +
+                '<div style="background: white; padding: 20px; border-radius: 8px; margin-top: 20px; border: 3px solid #805ad5;">' +
+                '<h5 style="margin-bottom: 15px;">Meta-Constructor\'s Synthesis</h5>' +
+                '<p>A just system would need to:</p>' +
+                '<ul style="line-height: 2; margin: 10px 0 0 30px;">' +
+                '<li>Ensure the <strong>Floor</strong> is met (Nussbaum)</li>' +
+                '<li>Make the <strong>Structure</strong> fair behind the Veil (Rawls)</li>' +
+                '<li>Respect <strong>Liberty</strong> and avoid forced labor (Nozick)</li>' +
+                '<li>Maintain <strong>Connection</strong> and care relationships (Care)</li>' +
+                '</ul>' +
+                '<p style="margin-top: 15px; font-weight: bold;">Where these conflict, you have identified a genuine ethical dilemma that requires careful balancing.</p>' +
+                '</div>';
+        }
+
+        // Download responses
+        function downloadResponses() {
+            const checkpoints = [
+                'checkpoint0', 'checkpoint1', 'checkpoint2', 
+                'checkpoint3', 'checkpoint4', 'checkpointFinal'
+            ];
+            
+            const labels = [
+                'Introduction: Bias Check',
+                'Module 1: Difference Principle',
+                'Module 2: Wilt Chamberlain Position',
+                'Module 3: Care vs. Rules Scenario',
+                'Module 4: At-Risk Capability',
+                'Final Synthesis: Three Study Questions'
+            ];
+            
+            let content = 'JUSTICE AS FAIRNESS - LEARNING RESPONSES\n';
+            content += '='.repeat(60) + '\n\n';
+            
+            checkpoints.forEach((id, i) => {
+                const textarea = document.getElementById(id);
+                if (textarea && textarea.value.trim()) {
+                    content += labels[i] + '\n';
+                    content += '-'.repeat(60) + '\n';
+                    content += textarea.value.trim() + '\n\n';
+                }
+            });
+
+            // Add Four-Way Audit if completed
+            const nussbaum = document.getElementById('nussbaumAudit');
+            if (nussbaum && nussbaum.value.trim()) {
+                content += 'FOUR-WAY DIAGNOSTIC AUDIT\n';
+                content += '='.repeat(60) + '\n\n';
+                content += '1. Nussbaum (Floor):\n' + nussbaum.value.trim() + '\n\n';
+                content += '2. Rawls (Structure):\n' + document.getElementById('rawlsAudit').value.trim() + '\n\n';
+                content += '3. Nozick (Liberty):\n' + document.getElementById('nozickAudit').value.trim() + '\n\n';
+                content += '4. Care (Connection):\n' + document.getElementById('careAudit').value.trim() + '\n\n';
+            }
+
+            // Add Capability Assessment
+            if (Object.keys(capabilityStates).length > 0) {
+                content += 'CAPABILITIES ASSESSMENT\n';
+                content += '='.repeat(60) + '\n\n';
+                const caps = ['Life', 'Bodily Health', 'Bodily Integrity', 'Senses/Imagination/Thought', 
+                             'Emotions', 'Practical Reason', 'Affiliation', 'Other Species', 'Play', 
+                             'Control over Environment'];
+                for (let i = 1; i <= 10; i++) {
+                    if (capabilityStates[i]) {
+                        content += caps[i-1] + ': ' + capabilityStates[i].toUpperCase() + '\n';
                     }
                 }
+                content += '\n';
             }
+            
+            content += '\nCompleted: ' + new Date().toLocaleString();
+            content += '\n\nCLASS 16 COMPLETE: Four Blueprints of Justice mastered.';
+            
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'justice_as_fairness_responses.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize
+        window.addEventListener('load', function() {
+            updateProgress();
+            updateChamberlain();
+            document.querySelector('h1').focus();
         });
     </script>
 </body>
